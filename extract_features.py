@@ -28,15 +28,14 @@ def _snake_to_camel(name):
 
 def main():
     resources = LanguageResources(args)
-    with open(args.src_path) as f_src:
-        with open(args.tgt_path) as f_tgt:
-            for src, tgt in zip(f_src.readlines(), f_tgt.readlines()):
-                results = []
-                for feature_name in _implemented_features_names():
-                    feature = _load_feature_class(feature_name, src, tgt, resources)
-                    feature.run()
-                    results.append(feature)
-                sys.stdout.write('{}\n'.format('\t'.join(['{}'.format(r.score) for r in results])))
+    for src, tgt in zip(open(args.src_path), open(args.tgt_path)):
+        results = []
+        for feature_name in _implemented_features_names():
+            feature = _load_feature_class(
+                feature_name, src.strip(), tgt.strip(), resources)
+            feature.run()
+            results.append(feature)
+        sys.stdout.write('{}\n'.format('\t'.join(['{}'.format(r.score) for r in results])))
 
 
 if __name__ == '__main__':
