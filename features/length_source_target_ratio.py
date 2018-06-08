@@ -1,5 +1,4 @@
 from features.base_feature import LengthFeature
-from features.utils import zero_safe_division
 
 
 class LengthSourceTargetRatio(LengthFeature):
@@ -10,4 +9,4 @@ class LengthSourceTargetRatio(LengthFeature):
         super().__init__(source, target)
 
     def run(self):
-        self.score = zero_safe_division(self.src_len(), self.tgt_len())
+        self.score = self._zero_safe_division(self.src_len(), self.tgt_len())

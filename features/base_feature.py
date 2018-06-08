@@ -21,6 +21,13 @@ class BaseFeature:
     def _list(line):
         return line.strip().split()
 
+    @staticmethod
+    def _zero_safe_division(a, b):
+        try:
+            return a / b
+        except ZeroDivisionError:
+            return 0.
+
 
 class LengthFeature(BaseFeature):
     pass
