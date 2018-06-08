@@ -1,7 +1,7 @@
 import argparse
 
 
-def parse_arguments():
+def _parse_arguments():
     parser = argparse.ArgumentParser()
     parser.add_argument(
         '-s', '--src_path', help='source path'
@@ -11,13 +11,13 @@ def parse_arguments():
     )
     parser.add_argument(
         '-slm', '--source_lang_model', help='source language model',
-        default='toy_resources/lm.tok.de'
+        default='toy_resources/lm.tok.en'
     )
     parser.add_argument(
         '-tlm', '--target_lang_model', help='target language model',
-        default='toy_resources/lm.tok.en'
+        default='toy_resources/lm.tok.de'
     )
     return parser.parse_args()
 
 
-args = parse_arguments()
+args = _parse_arguments()
