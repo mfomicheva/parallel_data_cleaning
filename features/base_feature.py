@@ -1,6 +1,8 @@
+from load_resources import load_lm
+from parse_args import args
 
 
-class BaseFeature():
+class BaseFeature:
 
     name = None
 
@@ -21,21 +23,18 @@ class BaseFeature():
 
 
 class LengthFeature(BaseFeature):
-
-    def __init__(self, source, target):
-        super().__init__(source, target)
+    pass
 
 
 class LanguageModelFeature(BaseFeature):
 
-    def __init__(self, source, target):
-        super().__init__(source, target)
+    model = load_lm(args.source_lang_model)
+
+    def _lang_model_score(self, line):
+        return self.model.score(line, bos=True, eos=True)
 
 
 class MismatchFeature(BaseFeature):
-
-    def __init__(self, source, target):
-        super().__init__(source, target)
 
     @staticmethod
     def _is_number(token):
@@ -47,6 +46,4 @@ class MismatchFeature(BaseFeature):
 
 
 class AlignmentFeature(BaseFeature):
-
-    def __init__(self, source, target):
-        super().__init__(source, target)
+    pass

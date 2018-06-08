@@ -12,4 +12,4 @@ class LangModelTargetSentenceProba(LanguageModelFeature):
         super().__init__(source, target)
 
     def run(self):
-        self.score = self.model.score(self.tgt, bos=True, eos=True)
+        self.score = self._lang_model_score(self.tgt)
