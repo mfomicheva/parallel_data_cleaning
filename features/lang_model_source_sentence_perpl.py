@@ -7,4 +7,4 @@ class LangModelSourceSentencePerpl(LangModelSourceSentenceProba):
         self.score = self._lang_model_score(self.src)
 
     def _lang_model_score(self, line):
-        return self.model.perplexity(line)
+        return self.resources.src_lm.perplexity(line)

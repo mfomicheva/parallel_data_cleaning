@@ -1,14 +1,13 @@
-from load_resources import load_lm
-from parse_args import args
 
 
 class BaseFeature:
 
     name = None
 
-    def __init__(self, source, target):
+    def __init__(self, source, target, resources):
         self.src = source
         self.tgt = target
+        self.resources = resources
         self.score = None
 
     def src_len(self):
@@ -35,10 +34,8 @@ class LengthFeature(BaseFeature):
 
 class LanguageModelFeature(BaseFeature):
 
-    model = load_lm(args.source_lang_model)
-
     def _lang_model_score(self, line):
-        return self.model.score(line, bos=True, eos=True)
+        return self.resources.src_lm.score(line, bos=True, eos=True)
 
 
 class MismatchFeature(BaseFeature):
