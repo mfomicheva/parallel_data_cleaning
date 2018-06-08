@@ -7,16 +7,16 @@ from language_resources import LanguageResources
 from parse_args import args
 
 
-def _get_feature_names():
+def _implemented_features_names():
     return [name for _, name, _ in pkgutil.iter_modules(['features']) if
             not name.startswith('base')]
 
 
-def _load_feature_class(feature_name):
+def _load_feature_class(feature_name, src, tgt, resources):
     try:
         module = importlib.import_module('features.' + feature_name)
-        my_class = getattr(module, _snake_to_camel(feature_name))
-        return my_class
+        feature = getattr(module, _snake_to_camel(feature_name))
+        return feature(src, tgt, resources)
     except KeyError:
         sys.stderr('No feature with the name %s is defined', feature_name)
         return None
@@ -32,8 +32,8 @@ def main():
         with open(args.tgt_path) as f_tgt:
             for src, tgt in zip(f_src.readlines(), f_tgt.readlines()):
                 results = []
-                for feature_name in _get_feature_names():
-                    feature = _load_feature_class(feature_name)(src, tgt, resources)
+                for feature_name in _implemented_features_names():
+                    feature = _load_feature_class(feature_name, src, tgt, resources)
                     feature.run()
                     results.append(feature)
                 sys.stdout.write('{}\n'.format('\t'.join(['{}'.format(r.score) for r in results])))
