@@ -5,9 +5,6 @@ class MismatchNumbersIdentity(MismatchFeature):
 
     name = 'mismatch_numbers_identity'
 
-    def __init__(self, source, target):
-        super().__init__(source, target)
-
     def run(self):
         src_diff = self._missing(self._list(self.src), self._list(self.tgt))
         tgt_diff = self._missing(self._list(self.tgt), self._list(self.src))
