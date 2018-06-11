@@ -1,8 +1,6 @@
-import sys
-from string import punctuation
-
 import complex_features
 from patterns import Patterns
+from units import Units
 
 
 class FeatureExecutor:
@@ -13,6 +11,7 @@ class FeatureExecutor:
         self.resources = resources
         self.features = config['features']
         self.patterns = Patterns()
+        self.units = Units()
 
     def execute(self):
         results = {}
@@ -63,56 +62,7 @@ class FeatureExecutor:
         return getattr(complex_features, name)(resources)
 
     def _get_input(self, units):
-        return self._get_units(self.source, units), self._get_units(self.target, units)
-
-    def _get_units(self, initial_input, unit):
-        if unit == 'sentence':
-            return initial_input.strip()
-        elif unit == 'words':
-            return initial_input.strip().split()
-        elif unit == 'numbers':
-            return self._get_numbers(initial_input.strip().split())
-        elif unit == 'alphanums':
-            return self._get_alphanums(initial_input.strip().split())
-        elif unit in '.,:;!?':
-            return self._get_punct_mark(initial_input.strip().split(), unit)
-        elif unit == 'punctuation':
-            return self._get_punct_marks(initial_input.strip().split())
-        else:
-            sys.stderr.write('Error! Invalid unit type {}\n'.format(unit))
-
-    @staticmethod
-    def _get_punct_marks(tokens):
-        result = []
-        for token in tokens:
-            if token in punctuation:
-                result.append(token)
-        return result
-
-    @staticmethod
-    def _get_punct_mark(tokens, mark):
-        result = []
-        for token in tokens:
-            if token == mark:
-                result.append(token)
-        return result
-
-    @staticmethod
-    def _get_numbers(tokens):
-        result = []
-        for token in tokens:
-            if all(char.isdigit() for char in token):
-                result.append(token)
-        return result
-
-    @staticmethod
-    def _get_alphanums(tokens):
-        result = []
-        for token in tokens:
-            token = token.replace('-', '')
-            if not token.isalpha():
-                result.append(token)
-        return result
+        return self.units.get_units(self.source, units), self.units.get_units(self.target, units)
 
     @staticmethod
     def _concatenate(*args):
