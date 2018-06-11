@@ -2,7 +2,7 @@ import yaml
 import argparse
 
 from feature_executor import FeatureExecutor
-from language_resources import load_language_resources
+from language_resources import Resources
 
 
 def _read_feature_configuration(path):
@@ -28,11 +28,12 @@ def _parse_arguments():
 def main():
     paths = _parse_arguments()
     config = _read_feature_configuration('feature_config.yml')
-    language_resources = load_language_resources(config['resources'])
+    resources = Resources()
+    resources.load_resources(config['resources'])
     feature_names = []
     out = open(paths.out_path, 'w')
     for source, target in zip(open(paths.src_path), open(paths.tgt_path)):
-        executor = FeatureExecutor(source, target, config, language_resources)
+        executor = FeatureExecutor(source, target, config, resources)
         results = executor.execute()
         if not feature_names:
             feature_names = sorted(results.keys())

@@ -1,58 +1,44 @@
 resources:
-  source_lang_model: /home/marina/Workspace/data/toy_resources_data_cleaning/lm.tok.en
-  target_lang_model: /home/marina/Workspace/data/toy_resources_data_cleaning/lm.tok.de
+  source_language_model: /home/marina/Workspace/data/toy_resources_data_cleaning/lm.tok.de
+  target_language_model: /home/marina/Workspace/data/toy_resources_data_cleaning/lm.tok.en
+  source_lexical_table: /home/marina/Workspace/data/toy_resources_data_cleaning/lex.deen
+  target_lexical_table: /home/marina/Workspace/data/toy_resources_data_cleaning/lex.ende
 features:
-  - name: length_ratio_source_target
+  - name: counts_difference
     type: simple
     units: [words,numbers,alphanums,punctuation]
-    applies_to: both
-    logic: len(input[0]) / len(input[1]) if len(input[1]) else 0
-  - name: length_ratio_target_source
+    applies_to: []
+    logic: [ratio,inverse_ratio,difference,difference_normalized]
+  - name: counts_difference
+    type: simple
+    units: [".",",",":",";","!","?"]
+    applies_to: []
+    logic: [difference,difference_normalized]
+  - name: counts
     type: simple
     units: [words,numbers,alphanums,punctuation]
-    applies_to: both
-    logic: len(input[1]) / len(input[0]) if len(input[0]) else 0
-  - name: length_absolute_difference
-    type: simple
-    units: [words,numbers,alphanums,punctuation,".",",",":",";","!","?"]
-    applies_to: both
-    logic: abs(len(input[0]) - len(input[1]))
-  - name: length_relative_difference
-    type: simple
-    units: [words,numbers,alphanums,punctuation,".",",",":",";","!","?"]
-    applies_to: both
-    logic: abs(len(input[0]) - len(input[1])) / (max(len(input[0]), len(input[1]))) if (max(len(input[0]), len(input[1]))) else 0
-  - name: length
+    applies_to: [source,target]
+    logic: [count]
+  - name: jaccard
     type: simple
     units: [words,numbers,alphanums,punctuation]
-    applies_to: source
-    logic: len(input[0])
-  - name: length
-    type: simple
-    units: [words,numbers,alphanums,punctuation]
-    applies_to: target
-    logic: len(input[1])
+    applies_to: []
+    logic: [jaccard_index]
   - name: language_model_probability
-    type: external
+    type: complex
     units: [sentence]
-    applies_to: source
-    logic: model.score(input[0], side)
+    applies_to: [source,target]
     resource: language_model
-  - name: language_model_probability
-    type: external
-    units: [sentence]
-    applies_to: target
-    logic: model.score(input[1], side)
-    resource: language_model
+    class: LanguageModelProbability
   - name: language_model_perplexity
-    type: external
+    type: complex
     units: [sentence]
-    applies_to: source
-    logic: model.perplexity(input[0], side)
+    applies_to: [source,target]
     resource: language_model
-  - name: language_model_perplexity
-    type: external
-    units: [sentence]
-    applies_to: target
-    logic: model.perplexity(input[1], side)
-    resource: language_model
+    class: LanguageModelPerplexity
+  - name: lexical_probability
+    type: complex
+    units: [words]
+    applies_to: []
+    resource: lexical_table
+    class: LexicalProbability

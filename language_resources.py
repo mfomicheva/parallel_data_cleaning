@@ -1,25 +1,23 @@
 import kenlm
 
 
-class LanguageModel(dict):
+class Resources(dict):
 
-    def __init__(self, config):
+    def __init__(self):
         super().__init__()
-        self['source'] = _load_lm(config['source_lang_model'])
-        self['target'] = _load_lm(config['target_lang_model'])
+        self['language_model'] = dict()
+        self['lexical_table'] = dict()
 
-    def score(self, input, side):
-        return self[side].score(input)
+    def load_resources(self, config):
+        self['language_model']['source'] = kenlm.Model(config['source_language_model'])
+        self['language_model']['target'] = kenlm.Model(config['target_language_model'])
+        self['lexical_table']['source'] = self._load_table(config['source_lexical_table'])
+        self['lexical_table']['target'] = self._load_table(config['target_lexical_table'])
 
-    def perplexity(self, input, side):
-        return self[side].perplexity(input)
-
-
-def load_language_resources(config):
-    return {
-        'language_model': LanguageModel(config)
-    }
-
-
-def _load_lm(path):
-    return kenlm.Model(path)
+    @staticmethod
+    def _load_table(path):
+        table = {}
+        for line in open(path):
+            parts = line.strip().split()
+            table[parts[0], parts[1]] = parts[2]
+        return table
