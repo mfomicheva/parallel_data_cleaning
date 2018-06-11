@@ -1,41 +1,44 @@
-import pkgutil
-import sys
-import re
-import importlib
+import yaml
+import argparse
 
-from language_resources import LanguageResources
-from parse_args import args
+from feature_executor import FeatureExecutor
+from language_resources import load_language_resources
 
 
-def _implemented_features_names():
-    return [name for _, name, _ in pkgutil.iter_modules(['features']) if
-            not name.startswith('base')]
+def _read_feature_configuration(path):
+    with open(path) as f:
+        config = yaml.load(f)
+    return config
 
 
-def _load_feature_class(feature_name, src, tgt, resources):
-    try:
-        module = importlib.import_module('features.' + feature_name)
-        feature = getattr(module, _snake_to_camel(feature_name))
-        return feature(src, tgt, resources)
-    except KeyError:
-        sys.stderr('No feature with the name %s is defined', feature_name)
-        return None
-
-
-def _snake_to_camel(name):
-    return re.sub(r'(?:^|_)(\w)', lambda x: x.group(1).upper(), name)
+def _parse_arguments():
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        '-s', '--src_path', help='source path'
+    )
+    parser.add_argument(
+        '-t', '--tgt_path', help='target path'
+    )
+    parser.add_argument(
+        '-o', '--out_path', help='output path'
+    )
+    return parser.parse_args()
 
 
 def main():
-    resources = LanguageResources(args)
-    for src, tgt in zip(open(args.src_path), open(args.tgt_path)):
-        results = []
-        for feature_name in _implemented_features_names():
-            feature = _load_feature_class(
-                feature_name, src.strip(), tgt.strip(), resources)
-            feature.run()
-            results.append(feature)
-        sys.stdout.write('{}\n'.format('\t'.join(['{}'.format(r.score) for r in results])))
+    paths = _parse_arguments()
+    config = _read_feature_configuration('feature_config.yml')
+    language_resources = load_language_resources(config['resources'])
+    feature_names = []
+    out = open(paths.out_path, 'w')
+    for source, target in zip(open(paths.src_path), open(paths.tgt_path)):
+        executor = FeatureExecutor(source, target, config, language_resources)
+        results = executor.execute()
+        if not feature_names:
+            feature_names = sorted(results.keys())
+            print('\n'.join([f for f in feature_names]))
+        out.write('\t'.join(['{}'.format(results[k]) for k in feature_names]) + '\n')
+    out.close()
 
 
 if __name__ == '__main__':
