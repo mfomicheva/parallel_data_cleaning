@@ -1,18 +1,15 @@
 import kenlm
 
 
-class Resources(dict):
+class Resources:
 
     def __init__(self):
-        super().__init__()
-        self['language_model'] = dict()
-        self['lexical_table'] = dict()
+        self.paths = dict()
+        self.loaded = dict()
 
-    def load_resources(self, config):
-        self['language_model']['source'] = kenlm.Model(config['source_language_model'])
-        self['language_model']['target'] = kenlm.Model(config['target_language_model'])
-        self['lexical_table']['source'] = self._load_table(config['source_lexical_table'])
-        self['lexical_table']['target'] = self._load_table(config['target_lexical_table'])
+    def load_resources(self):
+        self.loaded['language_model'] = kenlm.Model(self.paths['language_model'])
+        self.loaded['lexical_table'] = self._load_table(self.paths['lexical_table'])
 
     @staticmethod
     def _load_table(path):

@@ -3,37 +3,25 @@
 class LanguageModel:
 
     def __init__(self, preloaded_models):
-        self.preloaded_models = preloaded_models['language_model']
+        self.model = preloaded_models.loaded['language_model']
 
 
 class LanguageModelProbability(LanguageModel):
 
-    def score(self, input, side):
-        return self.preloaded_models[side].score(input)
+    def score(self, input):
+        return self.model.score(input)
 
 
 class LanguageModelPerplexity(LanguageModel):
 
-    def score(self, input, side):
-        return self.preloaded_models[side].perplexity(input)
+    def score(self, input):
+        return self.model.perplexity(input)
 
 
 class LexicalProbability:
 
     def __init__(self, preloaded_models):
-        self.preloaded_models = preloaded_models['lexical_table']
-
-    def score(self, input, side):
-        return 0.
-
-
-class LexicalMatches:
-
-    def __init__(self):
-        pass
+        self.model = preloaded_models.loaded['lexical_table']
 
     def score(self, input):
-        pass
-
-    def _compute_matches(self):
-        pass
+        return 0.
