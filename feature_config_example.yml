@@ -39,6 +39,6 @@ features:
   - name: lexical_probability
     type: complex
     units: [words]
-    applies_to: []
+    applies_to: [source,target]
     resource: lexical_table
     class: LexicalProbability
