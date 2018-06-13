@@ -65,8 +65,8 @@ class ComplexFeatureExecutor(FeatureExecutor):
                 feature_name = self._concatenate(self.feature.name, unit_type)
                 results.update({feature_name: feature_class.score(input_data)})
             else:
-                self._run_source_or_target(input_data, self.source, unit_type, 'source')
-                self._run_source_or_target(input_data, self.target, unit_type, 'target')
+                results.update(self._run_source_or_target(input_data, self.source, unit_type, 'source'))
+                results.update(self._run_source_or_target(input_data, self.target, unit_type, 'target'))
         return results
 
     def _run_source_or_target(self, input_data, source_or_target, unit_type, side):
