@@ -1,4 +1,4 @@
-
+from math import log
 
 class LanguageModel:
 
@@ -28,13 +28,25 @@ class LexicalProbability:
         s2_words = set(s2)
         score = 1.
         for w1 in s1:
-            #options = [(10**-7, 'NULL')] + [(self.model[w1, w], w) for w in s2_words]
-            #w_score, w2 = max(options) # get max alignment word in s2
             options = [10**-7] + [self.model[w1, w] for w in s2_words]
             score *= max(options)
         score = score**(1./len(s1))
         return score
 
+    def _xent(self, s1, s2):
+        # original distributions
+        vs1 = dict( (w, s1.count(w)/len(s1)) for w in s1)
+        vs2 = dict( (w, s2.count(w)/len(s2)) for w in s2)
+
+        # compute translation
+        vps1 = dict()
+        for w1 in vs1.keys():
+            score = sum(vs2[w2]*self.model[w1, w2] for w2 in vs2)
+            if score == 0:
+                score == 1. # word not in vocabulary, assume copied
+            vps1[w1] = score
+        xent = sum( vs1[w]*log(1./(vps1[w]+10**-4)) for w in vs1 )
+        return xent
 
     
 class LexicalProbabilityDirect(LexicalProbability):
@@ -47,3 +59,15 @@ class LexicalProbabilityInverse(LexicalProbability):
 
     def score(self, input_data):
         return self._score_ibm1_vit_avg(input_data.target, input_data.source)
+
+    
+class LexicalCrossEntropyDirect(LexicalProbability):
+
+    def score(self, input_data):
+        return self._xent(input_data.source, input_data.target)
+
+
+class LexicalCrossEntropyInverse(LexicalProbability):
+
+    def score(self, input_data):
+        return self._xent(input_data.target, input_data.source)
