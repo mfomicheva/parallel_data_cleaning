@@ -20,10 +20,11 @@ class LanguageModelPerplexity(LanguageModel):
 
 class LexicalProbability:
 
+    null_word_proba = 10 ** -7
+    zero_safe_xent = 10 ** -4
+
     def __init__(self, preloaded_models):
         self.model = preloaded_models.loaded['lexical_table']
-        self.null_word_proba = 10**-7
-        self.zero_safe_xent = 10**-4
 
     def _score_ibm1_vit_avg(self, s1, s2):
         # computes p(s1 | s2) via viterbi Ibm1 model
