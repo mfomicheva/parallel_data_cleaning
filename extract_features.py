@@ -62,12 +62,15 @@ def _parse_arguments():
     parser.add_argument(
         '-o', '--out_path', help='output path'
     )
+    parser.add_argument(
+        '-c', '--config_path', help='configuration path'
+    )
     return parser.parse_args()
 
 
 def main():
     paths = _parse_arguments()
-    features, resources = _read_feature_configuration('feature_config.yml')
+    features, resources = _read_feature_configuration(paths.config_path)
     resources_loaded = _load_resources(resources)
     out = open(paths.out_path, 'w')
     feature_names = []
