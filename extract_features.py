@@ -7,7 +7,7 @@ from feature_executor import ComplexFeatureExecutor
 from language_resources import Resources
 
 
-def _get_features(config):
+def _read_features(config):
     result = []
     for feature_description in config['features']:
         feature = Feature()
@@ -36,7 +36,7 @@ def _load_resources(resources):
     return resources
 
 
-def _get_resources(config):
+def _read_resources(config):
     resources = {}
     for side in ('source', 'target'):
         resources[side] = Resources()
@@ -48,7 +48,7 @@ def _get_resources(config):
 def _read_feature_configuration(path):
     with open(path) as f:
         config = yaml.load(f)
-    return _get_features(config), _get_resources(config)
+    return _read_features(config), _read_resources(config)
 
 
 def _parse_arguments():
