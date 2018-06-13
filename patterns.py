@@ -3,33 +3,33 @@
 class Patterns:
 
     @staticmethod
-    def count(units):
-        return len(units)
+    def count(input_data):
+        return len(input_data.source_or_target)
 
     @staticmethod
-    def ratio(units_pair):
-        return len(units_pair[0]) / len(units_pair[1]) if len(units_pair[1]) else 0
+    def ratio(input_data):
+        return len(input_data.source) / len(input_data.target) if len(input_data.target) else 0
 
     @staticmethod
-    def inverse_ratio(units_pair):
-        return len(units_pair[1]) / len(units_pair[0]) if len(units_pair[0]) else 0
+    def inverse_ratio(input_data):
+        return len(input_data.target) / len(input_data.source) if len(input_data.source) else 0
 
-    def jaccard_index(self, units_pair):
-        set1 = set(units_pair[0])
-        set2 = set(units_pair[1])
+    def jaccard_index(self, input_data):
+        set1 = set(input_data.source)
+        set2 = set(input_data.target)
         return self._zero_safe(len(set1.intersection(set2)), len(set1.union(set2)))
 
-    def difference_normalized(self, units_pair):
-        return self._zero_safe(self.difference(units_pair), self._maximum_length(units_pair))
+    def difference_normalized(self, input_data):
+        return self._zero_safe(self.difference(input_data), self._maximum_length(input_data))
 
     @staticmethod
-    def difference(units_pair):
-        return abs(len(units_pair[0]) - len(units_pair[1]))
+    def difference(input_data):
+        return abs(len(input_data.source) - len(input_data.target))
 
     @staticmethod
     def _zero_safe(a, b):
         return a / b if b else 0.
 
     @staticmethod
-    def _maximum_length(units_pair):
-        return max(len(units_pair[0]), len(units_pair[1]))
+    def _maximum_length(input_data):
+        return max(len(input_data.source), len(input_data.target))

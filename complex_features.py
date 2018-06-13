@@ -8,14 +8,14 @@ class LanguageModel:
 
 class LanguageModelProbability(LanguageModel):
 
-    def score(self, sentence):
-        return self.model.score(sentence)
+    def score(self, input_data):
+        return self.model.score(input_data.source_or_target)
 
 
 class LanguageModelPerplexity(LanguageModel):
 
-    def score(self, sentence):
-        return self.model.perplexity(sentence)
+    def score(self, input_data):
+        return self.model.perplexity(input_data.source_or_target)
 
 
 class LexicalProbability:
@@ -23,5 +23,5 @@ class LexicalProbability:
     def __init__(self, preloaded_models):
         self.model = preloaded_models.loaded['lexical_table']
 
-    def score(self, sentence):
+    def score(self, input_data):
         return 0.

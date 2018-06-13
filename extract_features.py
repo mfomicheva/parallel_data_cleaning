@@ -84,7 +84,7 @@ def main():
             results.update(executor.run())
         if not feature_names:
             feature_names = sorted(results.keys())
-            out.write('\t'.join(feature_names))
+            out.write('\t'.join(feature_names) + '\n')
         out.write('\t'.join(['{}'.format(results[k]) for k in feature_names]) + '\n')
     _print_feature_names(feature_names)
     out.close()
