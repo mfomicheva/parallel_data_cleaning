@@ -36,9 +36,22 @@ features:
     applies_to: [source,target]
     resource: language_model
     class: LanguageModelPerplexity
-  - name: lexical_probability
+    class: LexicalProbabilityDirect
+  - name: lexical_probability_inverse
     type: complex
     units: [words]
-    applies_to: [source,target]
+    applies_to: [target]
     resource: lexical_table
-    class: LexicalProbability
+    class: LexicalProbabilityInverse
+  - name: lexical_crossentropy_direct
+    type: complex
+    units: [words]
+    applies_to: [source]
+    resource: lexical_table
+    class: LexicalCrossEntropyDirect
+  - name: lexical_crossentropy_inverse
+    type: complex
+    units: [words]
+    applies_to: [target]
+    resource: lexical_table
+    class: LexicalCrossEntropyInverse

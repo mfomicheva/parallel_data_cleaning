@@ -81,5 +81,5 @@ class ComplexFeatureExecutor(FeatureExecutor):
         return results
 
     @staticmethod
-    def _load_complex_feature_class(name, resources):
-        return getattr(complex_features, name)(resources)
+    def _load_complex_feature_class(feature_name, resources):
+        return getattr(complex_features, feature_name)(resources)
