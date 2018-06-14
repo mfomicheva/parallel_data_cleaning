@@ -20,15 +20,15 @@ class InputData:
         if unit_type == 'sentence':
             return source_or_target.strip()
         elif unit_type == 'words':
-            return source_or_target.strip().split()
+            return source_or_target.split()
         elif unit_type == 'numbers':
-            return self._get_numbers(source_or_target.strip().split())
+            return self._get_numbers(source_or_target.split())
         elif unit_type == 'alphanums':
-            return self._get_alphanums(source_or_target.strip().split())
+            return self._get_alphanums(source_or_target.split())
         elif unit_type in '.,:;!?':
-            return self._get_punct_mark(source_or_target.strip().split(), unit_type)
+            return self._get_punct_mark(source_or_target.split(), unit_type)
         elif unit_type == 'punctuation':
-            return self._get_punct_marks(source_or_target.strip().split())
+            return self._get_punct_marks(source_or_target.split())
         else:
             sys.stderr.write('Error! Invalid unit type {}\n'.format(unit_type))
 
