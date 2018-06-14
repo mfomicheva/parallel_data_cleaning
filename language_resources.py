@@ -1,7 +1,7 @@
 import sys
 import kenlm
 
-from collections import Counter
+from collections import defaultdict
 
 
 class Resources:
@@ -23,8 +23,8 @@ class Resources:
 
     @staticmethod
     def _load_table(path):
-        table = Counter()
+        table = defaultdict(dict)
         for line in open(path):
             parts = line.strip().split()
-            table[parts[0], parts[1]] = float(parts[2])
+            table[parts[0]][parts[1]] = float(parts[2])
         return table
