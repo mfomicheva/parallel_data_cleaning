@@ -36,6 +36,11 @@ features:
     applies_to: [source,target]
     resource: language_model
     class: LanguageModelPerplexity
+  - name: lexical_probability_direct
+    type: complex
+    units: [words]
+    applies_to: [source]
+    resource: lexical_table
     class: LexicalProbabilityDirect
   - name: lexical_probability_inverse
     type: complex
