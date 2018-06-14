@@ -43,10 +43,10 @@ class SimpleFeatureExecutor(FeatureExecutor):
 
     def run(self):
         results = {}
-        for pattern in self.feature.logic:
-            for unit_type in self.feature.units:
-                input_data = InputData()
-                input_data.get_input_representation(self.source, self.target, unit_type)
+        for unit_type in self.feature.units:
+            input_data = InputData()
+            input_data.get_input_representation(self.source, self.target, unit_type)
+            for pattern in self.feature.logic:
                 if not self.feature.applies_to:
                     feature_name = self._concatenate(self.feature.name, pattern, unit_type)
                     results.update({feature_name: self._run_pattern(input_data, pattern)})
