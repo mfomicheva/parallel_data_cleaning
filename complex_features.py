@@ -31,7 +31,7 @@ class LexicalProbability:
         s2_words = set(s2)
         score = 1.
         for w1 in s1:
-            options = [self.null_word_proba] + [self.model[w1, w] for w in s2_words]
+            options = [self.null_word_proba] + [self.model[w1][w] for w in s2_words if w1 in self.model and w in self.model[w1]]
             score *= max(options)
         score **= (1. / len(s1))
         return score
@@ -44,7 +44,7 @@ class LexicalProbability:
         # compute translation
         vps1 = dict()
         for w1 in vs1.keys():
-            score = sum(vs2[w2] * self.model[w1, w2] for w2 in vs2)
+            score = sum(vs2[w2] * self.model[w1][w2] for w2 in vs2 if w1 in self.model and w2 in self.model[w1])
             if score == 0 and w1 in s2:
                 score = 1.  # word not in vocabulary, assume copied
             vps1[w1] = score
