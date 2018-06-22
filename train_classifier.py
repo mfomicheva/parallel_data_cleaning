@@ -1,6 +1,4 @@
 import argparse
-import csv
-import numpy as np
 
 from classifier import Classifier
 
@@ -19,22 +17,11 @@ def _parse_arguments():
     return parser.parse_args()
 
 
-def _load_features(path):
-    output = []
-    with open(path) as f:
-        reader = csv.reader(f, delimiter='\t')
-        next(reader, None)
-        for row in reader:
-            output.append([float(r) for r in row])
-    f.close()
-    return np.asarray(output)
-
-
 def main():
     paths = _parse_arguments()
-    positive_features = _load_features(paths.positive_features_path)
-    negative_features = _load_features(paths.negative_features_path)
     classifier = Classifier()
+    positive_features = classifier.load_features(paths.positive_features_path)
+    negative_features = classifier.load_features(paths.negative_features_path)
     classifier.train_model(positive_features, negative_features)
     classifier.save_model(paths.out_path)
 

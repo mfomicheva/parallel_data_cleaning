@@ -1,3 +1,4 @@
+import csv
 import pickle
 import numpy as np
 
@@ -25,3 +26,17 @@ class Classifier:
 
     def save_model(self, path):
         pickle.dump(self._classifier, open(path, 'wb'))
+
+    def load_model(self, path):
+        self._classifier = pickle.load(open(path, 'rb'))
+
+    @staticmethod
+    def load_features(path):
+        output = []
+        with open(path) as f:
+            reader = csv.reader(f, delimiter='\t')
+            next(reader, None)
+            for row in reader:
+                output.append([float(r) for r in row])
+        f.close()
+        return np.asarray(output)
