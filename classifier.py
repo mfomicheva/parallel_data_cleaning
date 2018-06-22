@@ -40,3 +40,11 @@ class Classifier:
                 output.append([float(r) for r in row])
         f.close()
         return np.asarray(output)
+
+    @staticmethod
+    def lazy_load(path):
+        with open(path) as f:
+            reader = csv.reader(f, delimiter='\t')
+            next(reader, None)
+            for row in reader:
+                yield np.asarray([float(r) for r in row])
