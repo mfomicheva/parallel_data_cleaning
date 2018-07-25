@@ -1,8 +1,8 @@
 resources:
-  source_language_model: /home/marina/Workspace/data/toy_resources_data_cleaning/lm.tok.de
-  target_language_model: /home/marina/Workspace/data/toy_resources_data_cleaning/lm.tok.en
-  source_lexical_table: /home/marina/Workspace/data/toy_resources_data_cleaning/lex.deen
-  target_lexical_table: /home/marina/Workspace/data/toy_resources_data_cleaning/lex.ende
+  source_language_model: /home/mfomicheva/data/toy_language_resources/english/english_lm.lm
+  target_language_model: /home/mfomicheva/data/toy_language_resources/spanish/spanish_lm.lm
+  source_lexical_table: /home/mfomicheva/data/toy_language_resources/giza/lex.e2s
+  target_lexical_table: /home/mfomicheva/data/toy_language_resources/giza/lex.e2s
 features:
   - name: counts_difference
     type: simple
