@@ -1,6 +1,3 @@
-# Local files
-feature_config_example.yml
-
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -107,5 +104,6 @@ venv.bak/
 .mypy_cache/
 
 feature_config.yml
+feature_config_example.yml
 toy*
 .gitignore
