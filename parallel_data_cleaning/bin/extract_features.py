@@ -47,10 +47,17 @@ def _read_resources(config):
     return resources
 
 
+def _read_params(config):
+    params = dict()
+    params['src_lang'] = config['params'].get('src_lang')
+    params['tgt_lang'] = config['params'].get('tgt_lang')
+    return params
+
+
 def _read_feature_configuration(path):
     with open(path) as f:
         config = yaml.load(f)
-    return _read_features(config), _read_resources(config)
+    return _read_features(config), _read_resources(config), _read_params(config)
 
 
 def main():
@@ -60,7 +67,9 @@ def main():
     parser.add_argument('-o', '--out_path', help='output path')
     parser.add_argument('-c', '--config_path', help='configuration path')
     paths = parse_args_with_help(parser)
-    features, resources = _read_feature_configuration(paths.config_path)
+    features, resources, params = _read_feature_configuration(paths.config_path)
+    src_lang = params['src_lang']
+    tgt_lang = params['tgt_lang']
     resources_loaded = _load_resources(resources)
     out = open(paths.out_path, 'w')
     feature_names = []
@@ -69,9 +78,9 @@ def main():
         results = {}
         for feature in features:
             if feature.feature_type == 'simple':
-                executor = SimpleFeatureExecutor(segid, source, target, feature, resources_loaded)
+                executor = SimpleFeatureExecutor(segid, source, target, src_lang, tgt_lang, feature, resources_loaded)
             else:
-                executor = ComplexFeatureExecutor(segid, source, target, feature, resources_loaded)
+                executor = ComplexFeatureExecutor(segid, source, target, src_lang, tgt_lang, feature, resources_loaded)
             results.update(executor.run())
         segid += 1
         if not feature_names:

@@ -18,10 +18,13 @@ class Feature:
 
 class FeatureExecutor:
 
-    def __init__(self, segid, source, target, feature, resources):
+    def __init__(self, segid, source, target, src_lang, tgt_lang, feature, resources):
         self.segid = segid
         self.source = source
         self.target = target
+        self.languages = dict()
+        self.languages['source'] = src_lang
+        self.languages['target'] = tgt_lang
         self.feature = feature
         self.resources = resources
         self.patterns = Patterns()
@@ -78,9 +81,9 @@ class ComplexFeatureExecutor(FeatureExecutor):
                     feature_class = self._load_complex_feature_class(self.feature.feature_class, self.resources[side])
                     input_data.set_source_or_target(self._side_by_name(side), unit_type)
                     feature_name = self._concatenate(self.feature.name, unit_type, side)
-                    results.update({feature_name: feature_class.score(input_data, segid=self.segid)})
+                    results.update({feature_name: feature_class.score(input_data, lang=self.languages[side], segid=self.segid)})
         return results
 
     @staticmethod
     def _load_complex_feature_class(feature_name, resources):
-        return getattr(complex_features, feature_name)(resources)
+        return getattr(complex_features, feature_name)(resources=resources)
