@@ -18,7 +18,8 @@ class Feature:
 
 class FeatureExecutor:
 
-    def __init__(self, source, target, feature, resources):
+    def __init__(self, segid, source, target, feature, resources):
+        self.segid = segid
         self.source = source
         self.target = target
         self.feature = feature
@@ -71,13 +72,13 @@ class ComplexFeatureExecutor(FeatureExecutor):
             if not self.feature.applies_to:
                 feature_class = self._load_complex_feature_class(self.feature.feature_class, self.resources)
                 feature_name = self._concatenate(self.feature.name, unit_type)
-                results.update({feature_name: feature_class.score(input_data)})
+                results.update({feature_name: feature_class.score(input_data, segid=self.segid)})
             else:
                 for side in self.feature.applies_to:
                     feature_class = self._load_complex_feature_class(self.feature.feature_class, self.resources[side])
                     input_data.set_source_or_target(self._side_by_name(side), unit_type)
                     feature_name = self._concatenate(self.feature.name, unit_type, side)
-                    results.update({feature_name: feature_class.score(input_data)})
+                    results.update({feature_name: feature_class.score(input_data, segid=self.segid)})
         return results
 
     @staticmethod

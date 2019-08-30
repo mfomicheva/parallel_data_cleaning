@@ -1,6 +1,19 @@
 from math import log
 
 
+class Embeddings:
+
+    def __init__(self, preloaded_sentence_embeddings):
+        self.model = dict()
+        self.model['source'] = preloaded_sentence_embeddings['source'].loaded['embeddings']
+        self.model['target'] = preloaded_sentence_embeddings['target'].loaded['embeddings']
+
+    def score(self, input_data, segid=None):
+        source_embedding = self.model['source'][segid]
+        target_embedding = self.model['target'][segid]
+        return source_embedding.dot(target_embedding)
+
+
 class LanguageModel:
 
     def __init__(self, preloaded_models):
@@ -9,13 +22,13 @@ class LanguageModel:
 
 class LanguageModelProbability(LanguageModel):
 
-    def score(self, input_data):
+    def score(self, input_data, **kwargs):
         return self.model.score(input_data.source_or_target)
 
 
 class LanguageModelPerplexity(LanguageModel):
 
-    def score(self, input_data):
+    def score(self, input_data, **kwargs):
         return self.model.perplexity(input_data.source_or_target)
 
 
@@ -55,23 +68,23 @@ class LexicalProbability:
     
 class LexicalProbabilityDirect(LexicalProbability):
 
-    def score(self, input_data):
+    def score(self, input_data, **kwargs):
         return self._score_ibm1_vit_avg(input_data.source, input_data.target)
 
 
 class LexicalProbabilityInverse(LexicalProbability):
 
-    def score(self, input_data):
+    def score(self, input_data, **kwargs):
         return self._score_ibm1_vit_avg(input_data.target, input_data.source)
 
     
 class LexicalCrossEntropyDirect(LexicalProbability):
 
-    def score(self, input_data):
+    def score(self, input_data, **kwargs):
         return self._xent(input_data.source, input_data.target)
 
 
 class LexicalCrossEntropyInverse(LexicalProbability):
 
-    def score(self, input_data):
+    def score(self, input_data, **kwargs):
         return self._xent(input_data.target, input_data.source)

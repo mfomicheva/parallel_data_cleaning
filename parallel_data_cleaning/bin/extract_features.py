@@ -43,6 +43,7 @@ def _read_resources(config):
         resources[side] = Resources()
         resources[side].paths['language_model'] = config['resources'].get('{}_language_model'.format(side), None)
         resources[side].paths['lexical_table'] = config['resources'].get('{}_lexical_table'.format(side), None)
+        resources[side].paths['embeddings'] = config['resources'].get('{}_embeddings'.format(side), None)
     return resources
 
 
@@ -63,14 +64,16 @@ def main():
     resources_loaded = _load_resources(resources)
     out = open(paths.out_path, 'w')
     feature_names = []
+    segid = 0
     for source, target in zip(open(paths.src_path), open(paths.tgt_path)):
         results = {}
         for feature in features:
             if feature.feature_type == 'simple':
-                executor = SimpleFeatureExecutor(source, target, feature, resources_loaded)
+                executor = SimpleFeatureExecutor(segid, source, target, feature, resources_loaded)
             else:
-                executor = ComplexFeatureExecutor(source, target, feature, resources_loaded)
+                executor = ComplexFeatureExecutor(segid, source, target, feature, resources_loaded)
             results.update(executor.run())
+        segid += 1
         if not feature_names:
             feature_names = sorted(results.keys())
             out.write('\t'.join(feature_names) + '\n')
