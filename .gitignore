@@ -103,7 +103,7 @@ venv.bak/
 # mypy
 .mypy_cache/
 
-feature_config.yml
-feature_config_example.yml
+parallel_data_cleaning/feature_config.yml
+parallel_data_cleaning/feature_config_example.yml
 toy*
 .gitignore

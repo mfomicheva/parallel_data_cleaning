@@ -1,10 +1,11 @@
 import yaml
 import argparse
 
-from feature_executor import Feature
-from feature_executor import SimpleFeatureExecutor
-from feature_executor import ComplexFeatureExecutor
-from language_resources import Resources
+from parallel_data_cleaning.feature_executor import Feature
+from parallel_data_cleaning.feature_executor import SimpleFeatureExecutor
+from parallel_data_cleaning.feature_executor import ComplexFeatureExecutor
+from parallel_data_cleaning.language_resources import Resources
+from parallel_data_cleaning.utils import parse_args_with_help
 
 
 def _read_features(config):
@@ -51,25 +52,13 @@ def _read_feature_configuration(path):
     return _read_features(config), _read_resources(config)
 
 
-def _parse_arguments():
-    parser = argparse.ArgumentParser()
-    parser.add_argument(
-        '-s', '--src_path', help='source path'
-    )
-    parser.add_argument(
-        '-t', '--tgt_path', help='target path'
-    )
-    parser.add_argument(
-        '-o', '--out_path', help='output path'
-    )
-    parser.add_argument(
-        '-c', '--config_path', help='configuration path'
-    )
-    return parser.parse_args()
-
-
 def main():
-    paths = _parse_arguments()
+    parser = argparse.ArgumentParser()
+    parser.add_argument('-s', '--src_path', help='source path')
+    parser.add_argument('-t', '--tgt_path', help='target path')
+    parser.add_argument('-o', '--out_path', help='output path')
+    parser.add_argument('-c', '--config_path', help='configuration path')
+    paths = parse_args_with_help(parser)
     features, resources = _read_feature_configuration(paths.config_path)
     resources_loaded = _load_resources(resources)
     out = open(paths.out_path, 'w')

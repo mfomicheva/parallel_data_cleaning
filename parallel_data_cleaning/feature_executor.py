@@ -1,8 +1,8 @@
 import sys
 
-import complex_features
-from patterns import Patterns
-from input_data import InputData
+from parallel_data_cleaning import complex_features
+from parallel_data_cleaning.patterns import Patterns
+from parallel_data_cleaning.input_data import InputData
 
 
 class Feature:

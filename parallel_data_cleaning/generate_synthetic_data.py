@@ -1,30 +1,7 @@
-import argparse
-
 from random import randint
 
 
 operations = ('swap', 'copy_source', 'copy_target','random_source', 'random_target')
-
-
-def parse_arguments():
-    parser = argparse.ArgumentParser()
-    parser.add_argument(
-        '-s', '--src_path', help='source path',
-        default='toy_corpus/src.en'
-    )
-    parser.add_argument(
-        '-t', '--tgt_path', help='target path',
-        default='toy_corpus/tgt.de'
-    )
-    parser.add_argument(
-        '-os', '--out_path_src', help='output path source',
-        default='output/src.neg.en'
-    )
-    parser.add_argument(
-        '-ot', '--out_path_tgt', help='output path target',
-        default='output/tgt.neg.en'
-    )
-    return parser.parse_args()
 
 
 def read_file(path):
@@ -56,13 +33,3 @@ def generate_synthetic_data(src_path, tgt_path, outpath_src, outpath_tgt):
         out_tgt.write('{}\n'.format(negative_pair[1]))
     out_src.close()
     out_tgt.close()
-
-
-def main():
-    args = parse_arguments()
-    generate_synthetic_data(
-        args.src_path, args.tgt_path, args.out_path_src, args.out_path_tgt)
-
-
-if __name__ == '__main__':
-    main()

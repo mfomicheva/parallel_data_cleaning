@@ -1,5 +1,6 @@
 from math import log
 
+
 class LanguageModel:
 
     def __init__(self, preloaded_models):
