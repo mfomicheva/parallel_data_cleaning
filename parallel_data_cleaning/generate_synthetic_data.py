@@ -16,7 +16,7 @@ def generate_synthetic_data(src_path, tgt_path, outpath_src, outpath_tgt):
     out_src = open(outpath_src, 'w')
     out_tgt = open(outpath_tgt, 'w')
     for src, tgt in zip(sources, targets):
-        operation = operations[randint(0, 4)]
+        operation = operations[randint(0, 6)]
         negative_pair = None
         if operation == 'swap':
             negative_pair = (tgt, src)
