@@ -1,7 +1,8 @@
+import math
 from random import randint
 
 
-operations = ('swap', 'copy_source', 'copy_target','random_source', 'random_target')
+operations = ('swap', 'copy_source', 'copy_target', 'random_source', 'random_target', 'missing', 'added')
 
 
 def read_file(path):
@@ -27,6 +28,15 @@ def generate_synthetic_data(src_path, tgt_path, outpath_src, outpath_tgt):
             negative_pair = (sources[randint(0, len(sources) - 1)], tgt)
         elif operation == 'random_target':
             negative_pair = (src, targets[randint(0, len(targets) - 1)])
+        elif operation == 'missing' or operation == 'added':
+            source_tokens = src.split()
+            target_tokens = tgt.split()
+            if operation == 'missing':
+                to_preserve = math.ceil(len(target_tokens) * 0.6)
+                negative_pair = (src, ' '.join(target_tokens[:to_preserve]))
+            else:
+                to_preserve = math.ceil(len(source_tokens) * 0.6)
+                negative_pair = (' '.join(source_tokens[:to_preserve]), tgt)
         else:
             pass
         out_src.write('{}\n'.format(negative_pair[0]))
