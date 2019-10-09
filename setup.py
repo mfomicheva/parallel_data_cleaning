@@ -19,6 +19,7 @@ setup(
             'extract-features=parallel_data_cleaning.bin.extract_features:main',
             'train-classifier=parallel_data_cleaning.bin.train_classifier:main',
             'generate-synthetic=parallel_data_cleaning.bin.generate_synthetic_data:main',
+            'build-testset=parallel_data_cleaning.bin.build_testset:main',
         ]
     }
 )

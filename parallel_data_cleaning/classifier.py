@@ -41,10 +41,9 @@ class Classifier:
         f.close()
         return np.asarray(output)
 
-    @staticmethod
-    def lazy_load(path):
-        with open(path) as f:
-            reader = csv.reader(f, delimiter='\t')
-            next(reader, None)
-            for row in reader:
-                yield np.asarray([float(r) for r in row])
+
+def lazy_load_features(path):
+    with open(path) as f:
+        reader = csv.reader(f, delimiter='\t')
+        for row in reader:
+            yield np.asarray([float(r) for r in row])
